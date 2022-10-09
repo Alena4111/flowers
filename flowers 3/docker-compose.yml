@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  app:
+    image: 'flower:latest'
+    build: .
+    container_name: app
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5455/flowers
+      - SPRING_DATASOURCE_USERNAME=alena
+      - SPRING_DATASOURCE_PASSWORD=1234
+  postgres:
+    image: postgres:12
+    environment:
+      POSTGRES_DB: "flower"
+      POSTGRES_USER: "alena"
+      POSTGRES_PASSWORD: "1234"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init-database.sql
+    ports:
+      - "5455:5432"
